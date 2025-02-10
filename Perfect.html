@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Valentine Surprise for</title>
+  <style>
+    /* Basic page styling */
+    body {
+      margin: 0;
+      padding: 0;
+      background: #ffe6e6;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+    .message {
+      font-size: 40px;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #ff4d4d;
+    }
+    .buttons {
+      display: flex;
+      gap: 20px;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #yesBtn {
+      background-color: #ff4d4d;
+      color: white;
+    }
+    #noBtn {
+      background-color: #777;
+      color: white;
+      position: relative;
+      transition: transform 0.3s ease;
+    }
+    #stopBtn {
+      background-color: #333;
+      color: white;
+      display: none;
+    }
+
+    /* Falling elements styles */
+    .falling {
+      position: fixed;
+      top: -50px;
+      pointer-events: none;
+      user-select: none;
+      animation: fall linear;
+    }
+    @keyframes fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="message">Will you be my valentine? 🫰</div>
+  <div class="buttons">
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn">No</button>
+    <button id="stopBtn">Stop Rain</button>
+  </div>
+
+  <audio id="bgMusic" loop>
+    <source src="D:\Perfect - 320Kbps-(Mr-Jat.in).mp3" type="audio/mp3">
+  </audio>
+
+  <script>
+    let rainInterval;
+
+    function createFallingElement(symbol) {
+      const element = document.createElement('div');
+      element.className = 'falling';
+      element.innerText = symbol;
+      
+      // Random horizontal position
+      element.style.left = Math.random() * window.innerWidth + 'px';
+      
+      // Random animation duration (between 3 to 6 seconds)
+      const duration = 3 + Math.random() * 3;
+      element.style.animationDuration = duration + 's';
+      
+      // Random size (font-size between 30px and 60px)
+      const size = 30 + Math.random() * 30;
+      element.style.fontSize = size + 'px';
+      
+      document.body.appendChild(element);
+      
+      // Remove after animation
+      setTimeout(() => {
+        element.remove();
+      }, duration * 1000);
+    }
+
+    function startRain() {
+      const elements = ['❤️', '🧸'];
+      rainInterval = setInterval(() => {
+        // Create multiple elements per interval for denser rain
+        for (let i = 0; i < 5; i++) {
+          const symbol = elements[Math.floor(Math.random() * elements.length)];
+          createFallingElement(symbol);
+        }
+      }, 200);
+      document.getElementById('stopBtn').style.display = 'inline';
+      document.getElementById('bgMusic').play();
+    }
+
+    function stopRain() {
+      clearInterval(rainInterval);
+      document.getElementById('stopBtn').style.display = 'none';
+      document.getElementById('bgMusic').pause();
+    }
+
+    // Event listeners
+    document.getElementById('yesBtn').addEventListener('click', () => {
+      startRain();
+      alert("Yay! I'm so happy! ❤️");
+    });
+
+    document.getElementById('stopBtn').addEventListener('click', stopRain);
+
+    const noBtn = document.getElementById('noBtn');
+    noBtn.addEventListener('mouseover', () => {
+      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+      noBtn.style.position = 'absolute';
+      noBtn.style.left = x + 'px';
+      noBtn.style.top = y + 'px';
+    });
+  </script>
+</body>
+</html>
